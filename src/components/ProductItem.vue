@@ -1,5 +1,7 @@
 <script setup lang="ts">
-  defineProps({
+  import {colors} from "./colors.ts";
+
+  const props = defineProps({
     id: String,
     thumbnail: String,
     title: String,
@@ -7,10 +9,12 @@
     rating: Number,
     price: Number
   })
+
+  const bgColor = colors.get(props.category)
 </script>
 
 <template>
-  <li class="flex-row">
+  <li class="flex-row" :style="{ background: bgColor }">
     <img class="thumbnail" :src="thumbnail" :alt="title" />
     <div class="flex-column">
       <div class="flex-row gap-2 align-baseline">
