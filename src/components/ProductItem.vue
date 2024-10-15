@@ -2,7 +2,7 @@
   import {colors} from "./colors.ts";
 
   const props = defineProps({
-    id: String,
+    id: Number,
     thumbnail: String,
     title: String,
     category: String,
