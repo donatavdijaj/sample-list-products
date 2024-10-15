@@ -1,16 +1,25 @@
 <script setup lang="ts">
-  import {colors} from "./colors.ts";
+import { useQueryClient } from '@tanstack/vue-query'
+import { colors } from '../utils/colors.ts'
 
-  const props = defineProps({
-    id: Number,
-    thumbnail: String,
-    title: String,
-    category: String,
-    rating: Number,
-    price: Number
-  })
+const props = defineProps({
+	id: Number,
+	thumbnail: String,
+	title: String,
+	category: String,
+	rating: Number,
+	price: Number,
+})
 
-  const bgColor = colors.get(props.category)
+const bgColor = colors.get(props.category)
+
+const queryClient = useQueryClient()
+
+function deleteItem() {
+	queryClient.setQueryData(['products'], (prev) =>
+		prev.filter(({ id }) => id !== props.id),
+	)
+}
 </script>
 
 <template>
@@ -20,6 +29,7 @@
       <div class="flex-row gap-2 align-baseline">
         <h1 class="id">#{{ id }}</h1>
         <h2 class="title">{{ title }}</h2>
+        <button @click="deleteItem">Delete</button>
       </div>
       <div class="flex-row gap-5">
         <p>{{ category }}</p>
