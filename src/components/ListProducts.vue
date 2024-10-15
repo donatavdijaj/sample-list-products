@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import ProductItem from "./ProductItem.vue";
 import { downloadProductList } from './download-product-list.ts'
 import { Product } from './types.ts'
 
@@ -11,11 +12,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <pre class="gray">{{ data }}</pre>
+  <ul v-for="product in data" :key="product.id">
+    <ProductItem :="product" />
+  </ul>
 </template>
 
 <style scoped>
-.gray {
-  color: gray;
-}
 </style>
