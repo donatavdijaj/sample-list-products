@@ -13,6 +13,8 @@
   "dependencies": {
     "@tanstack/vue-query": "^5.59.13",
     "@tanstack/vue-query-devtools": "^5.59.13",
+    "@volar/language-server": "2.4.0-alpha.18",
+    "@vue/language-server": "2.0.28",
     "vue": "^3.5.12"
   },
   "devDependencies": {

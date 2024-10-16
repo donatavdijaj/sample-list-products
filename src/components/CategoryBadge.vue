@@ -1,13 +1,4 @@
-<template>
-  <span
-      class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
-      :class="colors"
-  >
-    <slot/>
-  </span>
-</template>
-
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
 	category: String,
 })
@@ -25,7 +16,7 @@ const colors = {
 	'bg-gray-100 text-gray-700 ring-gray-300': props.category === 'laptops',
 	'bg-stone-100 text-stone-700 ring-stone-300':
 		props.category === 'mens-shirts',
-	'bg-black text-black ring-black': props.category === 'mens-shoes',
+	'bg-gray-300 text-white ring-black': props.category === 'mens-shoes',
 	'bg-amber-100 text-amber-700 ring-amber-300':
 		props.category === 'mens-watches',
 	'bg-neutral-100 text-neutral-700 ring-neutral-300':
@@ -40,7 +31,7 @@ const colors = {
 	'bg-teal-100 text-teal-700 ring-teal-300': props.category === 'sunglasses',
 	'bg-slate-100 text-slate-700 ring-slate-300': props.category === 'tablets',
 	'bg-zinc-100 text-zinc-700 ring-zinc-300': props.category === 'tops',
-	'bg-white text-white ring-white': props.category === 'vehicle',
+	'bg-white text-gray-700 ring-gray-300': props.category === 'vehicle',
 	'bg-emerald-100 text-emerald-700 ring-emerald-300':
 		props.category === 'womens-bags',
 	'bg-pink-100 text-pink-700 ring-pink-300':
@@ -52,3 +43,12 @@ const colors = {
 	'bg-sky-100 text-sky-700 ring-sky-300': props.category === 'womens-watches',
 }
 </script>
+
+<template>
+  <span
+      class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
+      :class="colors"
+  >
+    <slot/>
+  </span>
+</template>

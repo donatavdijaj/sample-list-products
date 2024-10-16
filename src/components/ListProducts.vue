@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import useProducts from '../hooks/useProducts'
-import { Product } from '../utils/types.ts'
 import ProductItem from './ProductItem.vue'
 
-const { data } = useProducts() as Array<Product>
+const { data } = useProducts()
 
 const sortType = ref<'asc' | 'desc' | null>(null)
 const currentSortMessage = computed(() => {

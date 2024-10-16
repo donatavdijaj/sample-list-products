@@ -1,26 +1,21 @@
 <script setup lang="ts">
-import { useQueryClient } from '@tanstack/vue-query'
+import { useDeleteProduct } from '../hooks/useDeleteProduct.ts'
 import { capitalize } from '../utils/capitalize.ts'
 import CategoryBadge from './CategoryBadge.vue'
 import StarIcon from './StarIcon.vue'
 
 const props = defineProps({
-	id: Number,
-	thumbnail: String,
-	title: String,
-	category: String,
-	rating: Number,
-	ratingsCount: Number,
-	price: Number,
+	id: { type: Number, required: true },
+	thumbnail: { type: String, required: true },
+	title: { type: String, required: true },
+	category: { type: String, required: true },
+	rating: { type: Number, required: true },
+	ratingsCount: { type: Number, required: true },
+	price: { type: Number, required: true },
 })
 
-const queryClient = useQueryClient()
-
-function deleteItem() {
-	queryClient.setQueryData(['products'], (prev) =>
-		prev.filter(({ id }) => id !== props.id),
-	)
-}
+const { mutate, isPending } = useDeleteProduct()
+const handleDelete = () => mutate({ id: props.id })
 </script>
 
 <template>
@@ -66,9 +61,11 @@ function deleteItem() {
             <CategoryBadge :category="category">{{ capitalize(category) }}</CategoryBadge>
           </div>
           
-          <button @click="deleteItem" type="button" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
+          <button @click="handleDelete" type="button" :disabled="isPending" class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold
            text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2
-            focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Delete</button>
+            focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400">
+            {{ isPending ? 'Deleting...' : 'Delete'}}
+          </button>
         </section>
       </div>
     </div>
