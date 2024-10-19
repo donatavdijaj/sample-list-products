@@ -1,49 +1,53 @@
-import { type UseQueryOptions, useQuery } from '@tanstack/vue-query'
-import { filterProducts } from '../utils/filter-products.ts'
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import type { Product } from '../utils/types.ts'
-import type { Ref } from 'vue'
+import { type Ref } from 'vue'
 
-type SearchProps = {
-    q?: string | null
-    sort?: string | null
-    categories?: string | null
-    priceMin?: number | null
-    priceMax?: number | null
+type Props = {
+    skip: Ref<number>
+    limit: Ref<number>
+    q?: Ref<string>
+    sort?: Ref<string>
+    category?: Ref<string>
 }
 
-export default function useProducts(options?: Omit<UseQueryOptions, 'queryKey'>, search?: Ref<SearchProps>) {
+type ApiResponse = {
+    products: Product[]
+    total: number
+    skip: number
+    limit: number
+}
+
+const baseURL = 'https://dummyjson.com/products'
+
+export default function useProducts({ skip, limit, q, sort, category }: Props) {
     return useQuery({
-        queryKey: ['products', search],
+        placeholderData: keepPreviousData,
+        queryKey: ['products', skip, limit, q, sort, category],
         queryFn: async () => {
             let sortBy = ''
             let order = ''
 
-            if (search?.value?.sort) [sortBy, order] = search?.value?.sort?.split('-')
+            if (sort) [sortBy, order] = sort.value.split('-')
 
             const params = new URLSearchParams({
-                q: search?.value?.q || '',
+                limit: limit.value.toString(),
+                skip: skip.value.toString(),
+                q: q?.value.toString() ?? '',
                 sortBy,
                 order,
             })
 
-            const baseURL = 'https://dummyjson.com/products'
-
-            const url = `${baseURL}/search?limit=300&${params.toString()}`
-            console.log(url)
+            const url = `${baseURL}/search?${params.toString()}`
             const res = await fetch(url)
-            let data = (await res.json()) as { products: Array<Product> }
+            let data = (await res.json()) as ApiResponse
 
-            // if (search?.value?.categories && search?.value?.categories.length != 0) {
-            //     data.products = data.products.filter(({ category }) => search?.value?.categories?.includes(category))
-            // }
-
-            if (search?.value.categories) {
-                data.products = data.products.filter(({ category }) => category === search?.value.categories)
+            if (category?.value) {
+                data.products = data.products.filter((item) => item.category === category.value)
             }
 
-            return data.products.filter(({ id }) => !localStorage.getItem(`products-${id}-deleted`)) as Array<Product>
+            data.products = data.products.filter(({ id }) => !localStorage.getItem(`products-${id}-deleted`))
+
+            return data
         },
-        select: (data) => filterProducts(data, 100) as Array<Product>,
-        ...options,
     })
 }

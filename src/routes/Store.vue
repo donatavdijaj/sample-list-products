@@ -3,27 +3,45 @@ import { useRoute, useRouter } from 'vue-router'
 import ListProducts from '../components/ListProducts.vue'
 import useProducts from '../hooks/useProducts.ts'
 import { useCategories } from '../hooks/useCategories.ts'
-import { ref, watch } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
+import Pagination from '../components/Pagination.vue'
 
 const router = useRouter()
 const route = useRoute()
 
-const formData = ref({
-    q: route.query.q,
-    sort: route.query.sort ?? '',
-    categories: route.query.categories ?? '',
+const q = ref(route.query.q?.toString() ?? '')
+const sort = ref(route.query.sort?.toString() ?? '')
+const category = ref(route.query.category?.toString() ?? '')
+const currentPage = ref(0)
+const limit = ref(10)
+const skip = computed(() => currentPage.value * limit.value)
+
+watchEffect(() =>
+    router.replace({
+        query: {
+            q: q.value,
+            category: category.value,
+            currentPage: currentPage.value,
+            limit: limit.value,
+            skip: skip.value,
+        },
+    })
+)
+
+const { data } = useProducts({
+    skip,
+    limit,
+    q,
+    sort,
+    category,
 })
-
-watch(formData, () => router.replace({ query: formData.value }), { deep: true })
-
-const { data: products } = useProducts(undefined, formData)
 const { data: categories } = useCategories()
 </script>
 
 <template>
     <form @submit.prevent class="flex flex-col items-center gap-5">
         <input
-            v-model="formData.q"
+            v-model="q"
             type="text"
             name="search"
             id="search"
@@ -33,7 +51,7 @@ const { data: categories } = useCategories()
         <div class="flex items-baseline gap-2">
             <select
                 name="sort"
-                v-model="formData.sort"
+                v-model="sort"
                 class="block w-full max-w-40 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
                 <option value="" disabled selected>Sort</option>
@@ -49,7 +67,7 @@ const { data: categories } = useCategories()
 
             <select
                 name="categories"
-                v-model="formData.categories"
+                v-model="category"
                 class="block w-full max-w-40 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
             >
                 <option value="" disabled selected>Pick a category</option>
@@ -59,5 +77,13 @@ const { data: categories } = useCategories()
             </select>
         </div>
     </form>
-    <ListProducts :products />
+    <Pagination
+        v-if="data"
+        class="w-full"
+        :current="currentPage"
+        :total="data.total"
+        :results-per-page="limit"
+        @update:current="(value) => (currentPage = value)"
+    />
+    <ListProducts v-if="data" :products="data.products" />
 </template>
