@@ -24,7 +24,7 @@ const totalPages = computed(() => Math.ceil(props.total / props.resultsPerPage))
 </script>
 
 <template>
-    <div class="flex items-center justify-between bg-white">
+    <div class="flex items-center justify-between">
         <div class="flex flex-1 justify-between sm:hidden">
             <a
                 href="#"

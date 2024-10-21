@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import type { Product } from '../utils/types.ts'
 import { type Ref } from 'vue'
+import { baseURL } from '../utils/constants.ts'
 
 type Props = {
     skip: Ref<number>
@@ -17,8 +18,6 @@ type ApiResponse = {
     skip: number
     limit: number
 }
-
-const baseURL = 'https://dummyjson.com/products'
 
 export default function useProducts({ skip, limit, q, sort, category, maxPrice }: Props) {
     return useQuery({

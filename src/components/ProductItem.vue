@@ -3,6 +3,7 @@ import { useDeleteProduct } from '../hooks/useDeleteProduct.ts'
 import { capitalize } from '../utils/capitalize.ts'
 import CategoryBadge from './CategoryBadge.vue'
 import StarIcon from './StarIcon.vue'
+import Rating from './Rating.vue'
 
 const props = defineProps({
     id: { type: Number, required: true },
@@ -19,45 +20,23 @@ const handleDelete = () => mutate({ id: props.id })
 </script>
 
 <template>
-    <li class="flex rounded-lg border p-2 text-left text-base">
+    <RouterLink :to="'/' + id.toString()" class="flex rounded-lg border bg-white p-2 text-left text-base">
         <div class="flex items-start gap-5">
-            <figure class="size-64 overflow-hidden rounded-lg bg-gray-100">
+            <div class="size-64 overflow-hidden rounded-lg bg-gray-100">
                 <img :src="thumbnail" :alt="title" class="object-cover object-center" />
-            </figure>
+            </div>
             <div class="flex h-full flex-col justify-between">
                 <div class="flex flex-col pr-4">
                     <h2 class="flex items-baseline gap-2 text-xl font-semibold text-gray-900">
                         {{ title }}
                     </h2>
 
-                    <section aria-labelledby="information-heading" class="mt-1">
+                    <section aria-labelledby="information-heading" class="mt-1 flex flex-col gap-5">
                         <h3 id="information-heading" class="sr-only">Product information</h3>
 
                         <p class="font-medium text-gray-900">${{ price }}</p>
 
-                        <div class="mt-4">
-                            <h4 class="sr-only">Reviews</h4>
-                            <div class="flex items-center">
-                                <p class="text-sm text-gray-700">
-                                    {{ rating }}
-                                    <span class="sr-only">out of 5 stars</span>
-                                </p>
-                                <div class="ml-1 flex items-center">
-                                    <StarIcon
-                                        v-for="i in [0, 1, 2, 3, 4]"
-                                        :key="rating"
-                                        :active="rating > i"
-                                        aria-hidden="true"
-                                    />
-                                </div>
-                                <div class="ml-4 hidden lg:flex lg:items-center">
-                                    <span class="text-gray-300" aria-hidden="true">&middot;</span>
-                                    <a href="#" class="ml-4 text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                                        See all {{ ratingsCount }} reviews
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                        <Rating :rating />
                     </section>
                 </div>
                 <section aria-labelledby="actions-heading" class="flex w-full items-baseline justify-between">
@@ -83,5 +62,5 @@ const handleDelete = () => mutate({ id: props.id })
                 </section>
             </div>
         </div>
-    </li>
+    </RouterLink>
 </template>
