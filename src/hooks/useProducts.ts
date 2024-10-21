@@ -8,6 +8,7 @@ type Props = {
     q?: Ref<string>
     sort?: Ref<string>
     category?: Ref<string>
+    maxPrice?: Ref<number | null>
 }
 
 type ApiResponse = {
@@ -19,10 +20,10 @@ type ApiResponse = {
 
 const baseURL = 'https://dummyjson.com/products'
 
-export default function useProducts({ skip, limit, q, sort, category }: Props) {
+export default function useProducts({ skip, limit, q, sort, category, maxPrice }: Props) {
     return useQuery({
         placeholderData: keepPreviousData,
-        queryKey: ['products', skip, limit, q, sort, category],
+        queryKey: ['products', skip, limit, q, sort, category, maxPrice],
         queryFn: async () => {
             let sortBy = ''
             let order = ''
@@ -46,6 +47,10 @@ export default function useProducts({ skip, limit, q, sort, category }: Props) {
             }
 
             data.products = data.products.filter(({ id }) => !localStorage.getItem(`products-${id}-deleted`))
+
+            if (maxPrice?.value) {
+                data.products = data.products.filter((item) => item.price < (maxPrice.value || 0))
+            }
 
             return data
         },

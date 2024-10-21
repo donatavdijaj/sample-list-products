@@ -12,18 +12,21 @@ const route = useRoute()
 const q = ref(route.query.q?.toString() ?? '')
 const sort = ref(route.query.sort?.toString() ?? '')
 const category = ref(route.query.category?.toString() ?? '')
-const currentPage = ref(0)
+const maxPrice = ref(route.query.maxPrice ? Number(route.query.maxPrice.toString()) : null)
+const currentPage = ref(route.query.currentPage ? Number(route.query.currentPage.toString()) : 0)
 const limit = ref(10)
 const skip = computed(() => currentPage.value * limit.value)
 
 watchEffect(() =>
     router.replace({
         query: {
-            q: q.value,
-            category: category.value,
-            currentPage: currentPage.value,
-            limit: limit.value,
-            skip: skip.value,
+            q: q.value || undefined,
+            sort: sort.value || undefined,
+            category: category.value || undefined,
+            currentPage: currentPage.value || undefined,
+            limit: limit.value || undefined,
+            skip: skip.value || undefined,
+            maxPrice: maxPrice.value || undefined,
         },
     })
 )
@@ -34,6 +37,7 @@ const { data } = useProducts({
     q,
     sort,
     category,
+    maxPrice,
 })
 const { data: categories } = useCategories()
 </script>
@@ -75,6 +79,15 @@ const { data: categories } = useCategories()
                     {{ category.name }}
                 </option>
             </select>
+
+            <input
+                class="rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                type="text"
+                name="maxPrice"
+                placeholder="Max Price"
+                id="maxPrice"
+                v-model="maxPrice"
+            />
         </div>
     </form>
     <Pagination
