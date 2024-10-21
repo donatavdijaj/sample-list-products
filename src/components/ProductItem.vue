@@ -2,7 +2,7 @@
 import { useDeleteProduct } from '../hooks/useDeleteProduct.ts'
 import { capitalize } from '../utils/capitalize.ts'
 import CategoryBadge from './CategoryBadge.vue'
-import StarIcon from './StarIcon.vue'
+import { TrashIcon } from '@heroicons/vue/24/outline'
 import Rating from './Rating.vue'
 
 const props = defineProps({
@@ -21,11 +21,11 @@ const handleDelete = () => mutate({ id: props.id })
 
 <template>
     <RouterLink :to="'/' + id.toString()" class="flex rounded-lg border bg-white p-2 text-left text-base">
-        <div class="flex items-start gap-5">
+        <div class="flex flex-1 items-start gap-5">
             <div class="size-64 overflow-hidden rounded-lg bg-gray-100">
                 <img :src="thumbnail" :alt="title" class="object-cover object-center" />
             </div>
-            <div class="flex h-full flex-col justify-between">
+            <div class="flex h-full flex-1 flex-col justify-between">
                 <div class="flex flex-col pr-4">
                     <h2 class="flex items-baseline gap-2 text-xl font-semibold text-gray-900">
                         {{ title }}
@@ -52,12 +52,12 @@ const handleDelete = () => mutate({ id: props.id })
                     </div>
 
                     <button
-                        @click="handleDelete"
+                        @click.stop.prevent="handleDelete"
                         type="button"
                         :disabled="isPending"
-                        class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
+                        class="flex gap-2 rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
                     >
-                        {{ isPending ? 'Deleting...' : 'Delete' }}
+                        <TrashIcon class="size-5" />
                     </button>
                 </section>
             </div>

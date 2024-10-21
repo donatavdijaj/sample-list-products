@@ -1,6 +1,17 @@
 <script setup lang="ts">
 import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
 import { BuildingStorefrontIcon } from '@heroicons/vue/24/solid'
+import { useQueryClient } from '@tanstack/vue-query'
+
+const queryClient = useQueryClient()
+
+function restoreDeletedItems() {
+    for (const k of Object.keys(localStorage)) {
+        if (k.includes('deleted')) localStorage.removeItem(k)
+    }
+
+    queryClient.invalidateQueries({ queryKey: ['products'] })
+}
 </script>
 
 <template>
@@ -15,12 +26,14 @@ import { BuildingStorefrontIcon } from '@heroicons/vue/24/solid'
                 >
                     Store
                 </RouterLink>
-                <a
-                    href="#"
-                    class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+            </div>
+            <div class="flex flex-1 items-center justify-end">
+                <button
+                    @click="restoreDeletedItems"
+                    class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400"
                 >
-                    Deleted Items
-                </a>
+                    Restore deleted items
+                </button>
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
