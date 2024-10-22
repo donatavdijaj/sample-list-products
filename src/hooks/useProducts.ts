@@ -2,6 +2,7 @@ import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import type { Product } from '../utils/types.ts'
 import { type Ref } from 'vue'
 import { baseURL } from '../utils/constants.ts'
+import { filterProducts } from '../utils/filter-products.ts'
 
 type Props = {
     skip: Ref<number>
@@ -9,7 +10,7 @@ type Props = {
     q?: Ref<string>
     sort?: Ref<string>
     category?: Ref<string>
-    maxPrice?: Ref<number>
+    maxPrice?: Ref<number | undefined>
 }
 
 type ApiResponse = {
@@ -44,10 +45,12 @@ export default function useProducts({ skip, limit, q, sort, category, maxPrice }
             data.products = data.products.filter((item) => {
                 const notDeleted = !localStorage.getItem(`products-${item.id}-deleted`)
                 const matchesCategory = category?.value ? item.category === category.value : true
-                const withinMaxPrice = maxPrice?.value ? item.price <= maxPrice.value : true
+                // const withinMaxPrice = maxPrice?.value ? item.price <= maxPrice.value : true
 
-                return notDeleted && matchesCategory && withinMaxPrice
+                return notDeleted && matchesCategory // && withinMaxPrice
             })
+
+            if (maxPrice?.value) data.products = filterProducts(data.products, maxPrice?.value)
 
             return data
         },
