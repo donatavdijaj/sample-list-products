@@ -6,15 +6,17 @@ import { TrashIcon } from '@heroicons/vue/24/outline'
 import Rating from './Rating.vue'
 import { currencyFormatter } from '../utils/formatters.ts'
 
-const props = defineProps({
-    id: { type: Number, required: true },
-    thumbnail: { type: String, required: true },
-    title: { type: String, required: true },
-    category: { type: String, required: true },
-    rating: { type: Number, required: true },
-    ratingsCount: { type: Number, required: true },
-    price: { type: Number, required: true },
-})
+type Props = {
+    id: number
+    thumbnail: string
+    title: string
+    category: string
+    rating: number
+    ratingsCount: number
+    price: number
+}
+
+const props = defineProps<Props>()
 
 const { mutate, isPending } = useDeleteProduct()
 const handleDelete = () => mutate({ id: props.id })
@@ -23,12 +25,12 @@ const handleDelete = () => mutate({ id: props.id })
 <template>
     <RouterLink
         :to="'/' + id.toString()"
-        class="flex w-[550px] gap-5 rounded-lg border bg-white p-2 text-left text-base"
+        class="flex flex-col gap-5 rounded-lg border bg-white p-2 text-left text-base md:w-[550px] md:flex-row"
     >
-        <div class="size-64 overflow-hidden rounded-lg bg-gray-100">
+        <div class="w-full overflow-hidden rounded-lg bg-gray-100 md:size-64">
             <img :src="thumbnail" :alt="title" class="object-cover object-center" />
         </div>
-        <div class="flex flex-1 flex-col justify-between">
+        <div class="flex flex-1 flex-col justify-between gap-5">
             <div class="flex flex-col gap-0">
                 <h2 class="flex items-baseline gap-2 text-xl font-semibold tracking-tight text-gray-900">
                     {{ title }}
@@ -42,7 +44,7 @@ const handleDelete = () => mutate({ id: props.id })
                     <Rating :rating />
                 </section>
             </div>
-            <section aria-labelledby="actions-heading" class="flex w-full items-baseline justify-between">
+            <section aria-labelledby="actions-heading" class="flex w-full items-end justify-between gap-10">
                 <h3 id="actions-heading" class="sr-only">Product actions</h3>
 
                 <div class="flex gap-1">

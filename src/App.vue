@@ -35,7 +35,7 @@ function restoreDeletedItems() {
             </button>
         </nav>
         <div class="flex-1 overflow-auto">
-            <header class="px-12 pt-5">
+            <header class="p-5 md:px-12">
                 <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Store</h1>
             </header>
             <main class="size-full">

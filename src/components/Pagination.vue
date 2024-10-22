@@ -25,7 +25,7 @@ const totalPages = computed(() => Math.ceil(props.total / props.resultsPerPage))
 
 <template>
     <div class="flex items-center justify-between">
-        <div class="flex flex-1 justify-between sm:hidden">
+        <div class="flex flex-1 items-center justify-between sm:hidden">
             <a
                 href="#"
                 class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
@@ -34,6 +34,20 @@ const totalPages = computed(() => Math.ceil(props.total / props.resultsPerPage))
             >
                 Previous
             </a>
+            <p v-if="totalPages > 0" class="text-xs text-gray-600">
+                <span class="font-medium">{{ current * resultsPerPage + 1 }}</span>
+                {{ ' ' }}
+                to
+                {{ ' ' }}
+                <span class="font-medium">{{ Math.min((current + 1) * resultsPerPage, total) }}</span>
+                {{ ' ' }}
+                of
+                {{ ' ' }}
+                <span class="font-medium">{{ total }}</span>
+                {{ ' ' }}
+                results
+            </p>
+            <p v-else class="text-sm text-gray-700">No results found.</p>
             <a
                 href="#"
                 class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"

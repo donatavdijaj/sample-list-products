@@ -33,9 +33,9 @@ const { data: product, isPending } = useProduct({ id: route.params.id.toString()
             <span class="sr-only">Loading...</span>
         </div>
     </div>
-    <article v-if="product" class="flex size-full flex-col gap-5 p-10">
-        <div class="flex gap-5">
-            <div class="grid size-96 place-items-center overflow-hidden rounded-lg bg-gray-100">
+    <article v-if="product" class="flex size-full flex-col gap-5 p-5 md:p-10">
+        <div class="flex flex-col gap-5 md:flex-row">
+            <div class="grid w-full place-items-center overflow-hidden rounded-lg bg-gray-100 md:size-96">
                 <img :src="product.thumbnail" :alt="product.title" class="object-cover object-center" />
             </div>
 
@@ -94,10 +94,9 @@ const { data: product, isPending } = useProduct({ id: route.params.id.toString()
                             <dd>{{ product.weight }} kg</dd>
                         </dl>
                         <dl class="flex gap-2">
-                            <dt class="font-semibold">Dimensions:</dt>
+                            <dt class="font-semibold">SKU:</dt>
                             <dd>
-                                {{ product?.dimensions.width }} x {{ product?.dimensions.height }} x
-                                {{ product?.dimensions.depth }} cm
+                                {{ product?.sku }}
                             </dd>
                         </dl>
                     </div>
@@ -143,7 +142,7 @@ const { data: product, isPending } = useProduct({ id: route.params.id.toString()
             </dl>
         </section>
 
-        <section aria-labelledby="reviews-heading" class="p-10">
+        <section aria-labelledby="reviews-heading" class="md:p-10">
             <h2 id="reviews-heading" class="text-lg font-medium text-gray-900">Reviews</h2>
             <div class="mt-6 space-y-10 divide-y divide-gray-200 border-b border-t border-gray-200 pb-10">
                 <div
