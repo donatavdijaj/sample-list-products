@@ -114,13 +114,20 @@ const { data: categories } = useCategories()
             @update:current="(value) => (currentPage = value)"
         />
         <ul role="list" v-if="data" class="flex max-w-xl flex-col items-center gap-5">
-            <ProductItem
-                class="w-full"
-                v-for="product in data.products"
-                :key="product.id"
-                :="product"
-                :ratingsCount="product.reviews.length"
-            />
+            <TransitionGroup
+                enter-active-class="transition-all duration-500 ease"
+                leave-active-class="transition-all duration-500 ease"
+                enter-from-class="opacity-0 transform translate-x-8"
+                leave-to-class="opacity-0 transform translate-x-8"
+            >
+                <ProductItem
+                    class="w-full"
+                    v-for="product in data.products"
+                    :key="product.id"
+                    :="product"
+                    :ratingsCount="product.reviews.length"
+                />
+            </TransitionGroup>
         </ul>
         <Pagination
             v-if="data && data.total > 0 && data.products.length"
