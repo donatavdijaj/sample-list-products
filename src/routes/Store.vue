@@ -5,6 +5,7 @@ import { useCategories } from '../hooks/useCategories.ts'
 import { computed, ref, watchEffect } from 'vue'
 import Pagination from '../components/Pagination.vue'
 import ProductItem from '../components/ProductItem.vue'
+import { formatRelativeTime } from '../utils/formatters.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -31,7 +32,7 @@ watchEffect(() =>
     })
 )
 
-const { data } = useProducts({
+const { data, isFetching, dataUpdatedAt } = useProducts({
     skip,
     limit,
     q,
@@ -100,6 +101,10 @@ const { data: categories } = useCategories()
                 />
             </div>
         </form>
+        <div class="flex w-full justify-end text-xs text-gray-500">
+            <p v-if="isFetching">Loading...</p>
+            <p v-else>Last updated {{ formatRelativeTime(new Date(dataUpdatedAt)) }}</p>
+        </div>
         <Pagination
             v-if="data"
             class="w-full"
@@ -118,7 +123,7 @@ const { data: categories } = useCategories()
             />
         </ul>
         <Pagination
-            v-if="data && data.total > 0"
+            v-if="data && data.total > 0 && data.products.length"
             class="w-full"
             :current="currentPage"
             :total="data.total"

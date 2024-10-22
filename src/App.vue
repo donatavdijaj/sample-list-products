@@ -38,7 +38,7 @@ function restoreDeletedItems() {
             <header class="px-12 pt-5">
                 <h1 class="text-3xl font-bold leading-tight tracking-tight text-gray-900">Store</h1>
             </header>
-            <main>
+            <main class="size-full">
                 <RouterView />
             </main>
         </div>
