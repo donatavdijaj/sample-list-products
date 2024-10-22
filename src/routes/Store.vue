@@ -12,9 +12,9 @@ const route = useRoute()
 const q = ref(route.query.q?.toString() ?? '')
 const sort = ref(route.query.sort?.toString() ?? '')
 const category = ref(route.query.category?.toString() ?? '')
-const maxPrice = ref(route.query.maxPrice ? Number(route.query.maxPrice.toString()) : null)
+const maxPrice = ref(route.query.maxPrice ? Number(route.query.maxPrice.toString()) : 100)
 const currentPage = ref(route.query.currentPage ? Number(route.query.currentPage.toString()) : 0)
-const limit = ref(10)
+const limit = ref(route.query.limit ? Number(route.query.limit) : 100)
 const skip = computed(() => currentPage.value * limit.value)
 
 watchEffect(() =>
@@ -79,6 +79,15 @@ const { data: categories } = useCategories()
                     <option v-for="category in categories" :key="category.slug" :value="category.slug">
                         {{ category.name }}
                     </option>
+                </select>
+
+                <select
+                    name="limit"
+                    v-model="limit"
+                    class="block w-full max-w-40 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+                    <option value="" disabled selected>Results per page</option>
+                    <option v-for="i in [10, 25, 50, 100, 200]" :key="i" :value="i">{{ i }} per page</option>
                 </select>
 
                 <input

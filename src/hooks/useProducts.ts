@@ -9,7 +9,7 @@ type Props = {
     q?: Ref<string>
     sort?: Ref<string>
     category?: Ref<string>
-    maxPrice?: Ref<number | null>
+    maxPrice?: Ref<number>
 }
 
 type ApiResponse = {
@@ -41,15 +41,13 @@ export default function useProducts({ skip, limit, q, sort, category, maxPrice }
             const res = await fetch(url)
             let data = (await res.json()) as ApiResponse
 
-            if (category?.value) {
-                data.products = data.products.filter((item) => item.category === category.value)
-            }
+            data.products = data.products.filter((item) => {
+                const notDeleted = !localStorage.getItem(`products-${item.id}-deleted`)
+                const matchesCategory = category?.value ? item.category === category.value : true
+                const withinMaxPrice = maxPrice?.value ? item.price <= maxPrice.value : true
 
-            data.products = data.products.filter(({ id }) => !localStorage.getItem(`products-${id}-deleted`))
-
-            if (maxPrice?.value) {
-                data.products = data.products.filter((item) => item.price < (maxPrice.value || 0))
-            }
+                return notDeleted && matchesCategory && withinMaxPrice
+            })
 
             return data
         },
