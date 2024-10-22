@@ -5,13 +5,14 @@ import Rating from '../components/Rating.vue'
 import CategoryBadge from '../components/CategoryBadge.vue'
 import { capitalize } from '../utils/capitalize.ts'
 import { ShieldCheckIcon, TruckIcon, BanknotesIcon, ShoppingBagIcon } from '@heroicons/vue/24/outline'
+import { currencyFormatter } from '../utils/formatters.ts'
 
 const route = useRoute()
 const { data: product } = useProduct({ id: route.params.id.toString() })
 </script>
 
 <template>
-    <article v-if="product" class="flex size-full flex-col gap-5 p-5">
+    <article v-if="product" class="flex size-full flex-col gap-5 p-10">
         <div class="flex gap-5">
             <div class="grid size-96 place-items-center overflow-hidden rounded-lg bg-gray-100">
                 <img :src="product.thumbnail" :alt="product.title" class="object-cover object-center" />
@@ -22,7 +23,7 @@ const { data: product } = useProduct({ id: route.params.id.toString() })
 
                 <div class="flex justify-between pr-10">
                     <h1 class="text-xl font-semibold text-gray-900">{{ product.title }}</h1>
-                    <p class="text-xl font-semibold text-gray-900">${{ product.price }}</p>
+                    <p class="text-xl font-semibold text-gray-900">{{ currencyFormatter.format(product.price) }}</p>
                 </div>
 
                 <Rating :rating="product.rating" />

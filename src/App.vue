@@ -17,7 +17,9 @@ function restoreDeletedItems() {
 <template>
     <div class="flex h-dvh w-dvw flex-col">
         <nav class="flex h-16 w-full gap-8 border-b border-gray-200 px-5">
-            <BuildingStorefrontIcon class="size-8 self-center text-indigo-700" />
+            <RouterLink to="/" class="self-center">
+                <BuildingStorefrontIcon class="size-8 text-indigo-700" />
+            </RouterLink>
             <RouterLink
                 to="/"
                 class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900"

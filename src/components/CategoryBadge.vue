@@ -1,7 +1,9 @@
 <script setup lang="ts">
-const props = defineProps({
-    category: String,
-})
+type Props = {
+    category: string
+}
+
+const props = defineProps<Props>()
 
 const colors = {
     'bg-red-100 text-red-700 ring-red-300': props.category === 'beauty',

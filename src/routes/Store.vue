@@ -92,7 +92,7 @@ const { data: categories } = useCategories()
 
                 <input
                     class="rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                    type="text"
+                    type="number"
                     name="maxPrice"
                     placeholder="Max Price"
                     id="maxPrice"
@@ -118,7 +118,7 @@ const { data: categories } = useCategories()
             />
         </ul>
         <Pagination
-            v-if="data"
+            v-if="data && data.total > 0"
             class="w-full"
             :current="currentPage"
             :total="data.total"

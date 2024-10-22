@@ -4,6 +4,7 @@ import { capitalize } from '../utils/capitalize.ts'
 import CategoryBadge from './CategoryBadge.vue'
 import { TrashIcon } from '@heroicons/vue/24/outline'
 import Rating from './Rating.vue'
+import { currencyFormatter } from '../utils/formatters.ts'
 
 const props = defineProps({
     id: { type: Number, required: true },
@@ -36,7 +37,7 @@ const handleDelete = () => mutate({ id: props.id })
                 <section aria-labelledby="information-heading" class="mt-1 flex flex-col gap-5">
                     <h3 id="information-heading" class="sr-only">Product information</h3>
 
-                    <p class="font-medium text-gray-900">${{ price }}</p>
+                    <p class="font-medium text-gray-900">{{ currencyFormatter.format(price) }}</p>
 
                     <Rating :rating />
                 </section>
